@@ -2,7 +2,7 @@ import React, {  useReducer, useState } from "react"
 import Timer from "./Timer";
 import { TYPES,RHYTEM_PATTERNS,initSecOptions } from "../dataObjects/dataObjects";
 import { Form, Input,Button } from "./styles/StyledComponents";
-
+import Metronome from "./Metronome";
 
 const getSecState = () => {
     try {
@@ -121,14 +121,16 @@ function Sweeping() {
                 />
                 <Button type="submit" onClick={handleSubmitSection}>addRhytem</Button>
             </div>
-            
+            <div>
             {Object.keys(secState).map((key, index) => {
                 return <p key={index}>{key}:{secState[key]}</p>
             })}
+            </div>
             <Button onClick={toggleTimer}>{timer ? 'Hide Timer' : 'Show Timer'}</Button>
             </Form>
-            {timer  && <Timer/> }
-          
+            <br/>
+            {timer  &&   <Timer/> }
+            <Metronome/> 
             
         </>
     )

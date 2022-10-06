@@ -2,6 +2,9 @@ import styled, { css } from "styled-components";
 
 
 export const Form = styled.form`
+display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 height: fit-content;
 width:fit-content;
 max-width: 700px;
@@ -28,7 +31,7 @@ ${sharedStyles}
 export const Button = styled.button`
 display: block;
 background-color: #1c92d2;
-color: #fff;
+color: #6EFACC;
 font-size: .9rem;
 border:0;
 border-radius: 5px;
@@ -36,9 +39,14 @@ height: 40px;
 padding: 0 20px;
 cursor: pointer;
 box-sizing: border-box;
-font-family: 'FLAMES';
+font-family:'NeoWriter';
 `
 export const DivNoForm = styled.div`
+display: flex;
+ 
+    justify-content: space-between;
+    align-items: center;
+flex-direction: column;
 height: fit-content;
 width:fit-content;
 max-width: 700px;
@@ -48,5 +56,13 @@ border-radius: 10px;
 box-sizing: border-box;
 box-shadow:0px 0px 20px 0px rgba(0,0,0,0.2);
 `
+export const DivForMetronome = styled.div`
 
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 250px;
+    justify-content: space-between;
+
+`
 

@@ -6,17 +6,25 @@ import styled, {createGlobalStyle,css} from 'styled-components';
 import Navbar from './components/Navbar';
 import {Routes, Route} from 'react-router-dom'
 import { useState } from 'react';
+import Welcome from './components/Welcome';
 
 const GlobalStyle = createGlobalStyle`
 html{
   height: fit-content;
 }
 body{
+ 
+
   font-family: 'Gemini Moon';
-  background: linear-gradient(to right, #8e0e00, #1f1c18);;
+  background: linear-gradient(to right, #c33764, #1d2671);
   height: fit-content;
   margin: 0;
   color: #555;
+}
+button:hover {
+  color: whitesmoke;
+  background-color: #c33764;
+  border-radius: 70%;
 }
 
 `
@@ -53,12 +61,13 @@ function App() {
     <>
     <GlobalStyle/>
     
-    <StyledHeader>Save my BPM</StyledHeader>
+    <StyledHeader>Shred It up</StyledHeader>
     <Navbar/>
     
     <StyledFormWrapper>
     <Routes>
-    <Route path='/' element={<Sweeping />}/>
+     <Route path='/' element={<Welcome/>}/> 
+    <Route path='/sweeping' element={<Sweeping />}/>
     <Route path='/alternate' element={<Alternate />}/>
     <Route path='/legato' element={<Legato />} />
     </Routes>

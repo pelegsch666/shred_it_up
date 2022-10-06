@@ -1,4 +1,5 @@
 import React, {  useReducer, useState } from "react"
+import Metronome from "./Metronome";
 import { TYPES,RHYTEM_PATTERNS,initSecOptions } from "../dataObjects/dataObjects";
 import { Form, Input,Button } from "./styles/StyledComponents";
 import Timer from "./Timer";
@@ -135,6 +136,8 @@ function Alternate() {
              <Button onClick={toggleTimer}>{timer === true ? 'Hide Timer' : 'Show Timer'}</Button>
             </Form>
             {timer === true ? <Timer/> : ''}
+            <Metronome></Metronome>
+          
         </>
 
 
