@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { DivForMetronome, DivNoForm } from './styles/StyledComponents'
+import { Button, DivForMetronome, DivNoForm } from './styles/StyledComponents'
 import Timer from '../dataObjects/timer'
-
+import {howl,howler} from 'howler'
 
 
 const DivForSettings = styled.div`
@@ -52,24 +52,28 @@ function Metronome() {
 
     const [sound, setSound] = useState();
 
-  async function playSound() {
-    console.log('Loading Sound');
-    const { sound } = await Audio.Sound.createAsync( require(audioUrlFirst)
-    );
-    setSound(sound);
+    const KICK_URL = '../audio/click1.mp3';
+	const audioContext = new AudioContext();
 
-    console.log('Playing Sound');
-    await sound.playAsync();
-  }
+	const gainNode = audioContext.createGain();
+	gainNode.gain.setValueAtTime(0.5, 0);
+	gainNode.connect(audioContext.destination);
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
+	async function handleClick() {
+		console.log('hey')
+        const response = await fetch(KICK_URL);
+		const soundBuffer = await response.arrayBuffer();
+		const kickBuffer = await audioContext.decodeAudioData(soundBuffer);
+		const kickSource = audioContext.createBufferSource();
+		kickSource.buffer = kickBuffer;
+		kickSource.connect(gainNode);
+        audioContext.resume()
+        kickSource.start()
+        
+        ;}
+    
+    
+   
 
 
 
@@ -111,7 +115,7 @@ function Metronome() {
                     <input type="range" min="20" max="280" step="1" onChange={(e) => setBpm(e.target.valueAsNumber)} />
                     <div>+</div>
                 </DivForSettings>
-                <div onClick={() => { playSound() }}>Start</div>
+                <Button onClick={() =>  handleClick() }>Start</Button>
                 <DivForSettings>
                     <div onClick={(e) => setLimitToCount(e)}>-</div>
                     <div>Count:{count}</div>
