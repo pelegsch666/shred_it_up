@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, DivForMetronome, DivNoForm } from './styles/StyledComponents'
 import Timer from '../dataObjects/timer'
-import {howl,howler} from 'howler'
-
+import {Howl} from 'howler'
 
 const DivForSettings = styled.div`
 display: flex;
@@ -22,13 +21,27 @@ justify-items: center;
 text-align: center;
 `
 
-const click1 = new Audio('./audio/click1.mp3')
+const click1 = 'src/audio/click1.mp3'
 const click2 = new Audio('./audio/click2.mp3')
 let isRuning = false
+
+function soundPlay(src) {
+    const sound = new Howl({ 
+        src,
+        html5: true
+    })
+    console.log('hey')
+    sound.play()
+}
+
+
+
+
+
 function handleSubmit() {
 
-    click1.play()
-
+    soundPlay(click1)
+    
     if (!isRuning) {
 
         isRuning = true;
@@ -50,27 +63,9 @@ function Metronome() {
     const [audioUrlFirst, setAudioUrlFirst] = useState('./audio/click1.mp3')
     const [audioUrlSecond, setAudioUrlSecond] = useState('./audio/click2.mp3')
 
-    const [sound, setSound] = useState();
+   
 
-    const KICK_URL = '../audio/click1.mp3';
-	const audioContext = new AudioContext();
-
-	const gainNode = audioContext.createGain();
-	gainNode.gain.setValueAtTime(0.5, 0);
-	gainNode.connect(audioContext.destination);
-
-	async function handleClick() {
-		console.log('hey')
-        const response = await fetch(KICK_URL);
-		const soundBuffer = await response.arrayBuffer();
-		const kickBuffer = await audioContext.decodeAudioData(soundBuffer);
-		const kickSource = audioContext.createBufferSource();
-		kickSource.buffer = kickBuffer;
-		kickSource.connect(gainNode);
-        audioContext.resume()
-        kickSource.start()
-        
-        ;}
+	
     
     
    
@@ -115,7 +110,7 @@ function Metronome() {
                     <input type="range" min="20" max="280" step="1" onChange={(e) => setBpm(e.target.valueAsNumber)} />
                     <div>+</div>
                 </DivForSettings>
-                <Button onClick={() =>  handleClick() }>Start</Button>
+                <Button onClick={() =>  soundPlay(click1) }>Start</Button>
                 <DivForSettings>
                     <div onClick={(e) => setLimitToCount(e)}>-</div>
                     <div>Count:{count}</div>
