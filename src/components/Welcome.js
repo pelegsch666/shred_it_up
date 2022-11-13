@@ -1,5 +1,4 @@
-import { DivNoForm } from "./styles/StyledComponents";
-
+import DivNoForm from "./styles/styled-components/DivNoForm";
 function Welcome(){
 
 return (

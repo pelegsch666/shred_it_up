@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, DivForMetronome, DivNoForm } from './styles/StyledComponents'
 import Timer from '../dataObjects/timer'
 import {Howl} from 'howler'
+import DivForMetronome from "./styles/styled-components/DivForMetronome";
+import DivNoForm from "./styles/styled-components/DivNoForm";
+import Button from './styles/styled-components/Button'
 
 const DivForSettings = styled.div`
 display: flex;
