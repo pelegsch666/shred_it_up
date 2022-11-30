@@ -1,8 +1,6 @@
-import React, { useReducer } from "react";
+import  { useReducer } from "react";
 
-import Form from "../styles/styled-components/Form";
 import Button from "../styles/styled-components/Button";
-import getSecState from "../functions/getSecState";
 import InputBlock from "./InputBlock";
 import Card from "../Card";
 import ExList from "./ExList";
