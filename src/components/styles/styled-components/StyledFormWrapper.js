@@ -2,9 +2,12 @@ import styled from "styled-components";
 
 const StyledFormWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   height: 100vh;
-  padding: 0 20px;
+  width: 400px;
+  gap: 20px;
+  margin: auto;
 `;
 
 export default StyledFormWrapper;

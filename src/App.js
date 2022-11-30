@@ -1,15 +1,11 @@
-import Sweeping from "./components/Sweeping";
-import Alternate from "./components/Alternate";
-import Legato from "./components/Legato";
-import Timer from "./components/Timer";
-import styled, { createGlobalStyle } from "styled-components";
-import Navbar from "./components/Navbar";
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import Welcome from "./components/Welcome";
-import StyledFormWrapper from "./components/styles/styled-components/StyledFormWrapper"
-import sharedStylesApp from "./components/styles/styled-components/sharedStylesApp";
-import StyledHeader from "./components/styles/styled-components/StyledHeader"
+import { createGlobalStyle } from "styled-components";
+
+import Timer from "./components/Timer/Timer";
+import Metronome from "./components/Metronome/Metronome";
+
+import StyledFormWrapper from "./components/styles/styled-components/StyledFormWrapper";
+import StyledHeader from "./components/styles/styled-components/StyledHeader";
+import ExercisesEditor from "./components/ExercisesEditor/ExercisesEditor";
 
 const GlobalStyle = createGlobalStyle`
 html{
@@ -31,30 +27,21 @@ button:hover {
   background-color: #b20a2c;
   border-radius: 70%;
 }
-li:hover{
+/* li:hover{
   font-size: 50px;
   
-}
+} */
 `;
-
-
-
 
 function App() {
   return (
     <>
       <GlobalStyle />
-
       <StyledHeader>Shred It up</StyledHeader>
-      <Navbar />
-
       <StyledFormWrapper>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/sweeping" element={<Sweeping />} />
-          <Route path="/alternate" element={<Alternate />} />
-          <Route path="/legato" element={<Legato />} />
-        </Routes>
+        <ExercisesEditor />
+        <Timer />
+        <Metronome />
       </StyledFormWrapper>
     </>
   );

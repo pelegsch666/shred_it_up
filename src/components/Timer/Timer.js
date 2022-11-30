@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import  Input  from "./styles/styled-components/Input";
-import DivNoForm from "./styles/styled-components/DivNoForm";
-import Button from "./styles/styled-components/Button";
+import  Input  from "../styles/styled-components/Input";
+import Card from "../Card";
+import Button from "../styles/styled-components/Button";
 const Timer = () => {
   // We need ref in this, because we are dealing
   // with JS setInterval to keep track of it and
@@ -84,8 +84,8 @@ const Timer = () => {
   };
 
   return (
-    <div>
-      <DivNoForm>
+    <>
+      <Card>
         <label>
           Minutes
           <Input type="number" onChange={(e) => setInput(e.target.value)} />
@@ -93,8 +93,8 @@ const Timer = () => {
         <h2>{timer}</h2>
         <Button onClick={onClickReset}>Start/Reset</Button>
         <Button onClick={clearTimer}>Clear Timer</Button>
-      </DivNoForm>
-    </div>
+      </Card>
+    </>
   );
 };
 
