@@ -1,12 +1,12 @@
-import  { useReducer } from "react";
+import { useReducer } from "react";
 
 import Button from "../styles/styled-components/Button";
 import InputBlock from "./InputBlock";
 import Card from "../Card";
 import ExList from "./ExList";
+import { useEffect } from "react";
 
-const ACTIONS = {
-  ADD_RHYTEM: "add",
+export const ACTIONS = {
   DELETE_RHYTEM: "delete",
   UPDATE_TEMPO: "update tempo",
   UPDATE_CURR_EX_NAME: "update exercise name",
@@ -15,47 +15,48 @@ const ACTIONS = {
   GET_LOCAL_STORAGE: "get local storage",
   SET_LOCAL_STORAGE: "set local storage",
   ADD_EXERCISE: "add exercise",
+  EDIT_TEMPO: "edit tempo",
 };
 
 const initialState = {
-  exerciesList: [], // [{name: string, tempo:number, type:string}]
+  exList: [], // [{name: string, tempo:number, type:string}]
   currExType: "",
   currExTempo: 0,
   currExName: "",
 };
 
-function reducer(state, payload) {
-  console.log("state", state);
-  console.log("payLoad", payload);
+export function reducer(state, payload) {
   const newState = { ...state };
-  const { action, sec, tempo, value } = payload;
+  const { action, sec, tempo, value, itemIndex } = payload;
 
   switch (action) {
     case ACTIONS.GET_LOCAL_STORAGE: {
       try {
-        const data = JSON.parse(window.localStorage.getItem("secStateAlter"));
+        const data = JSON.parse(window.localStorage.getItem("exList"));
+        console.log('data',data);
+        newState.exList = data;
         if (data) {
-          return data;
+          return newState;
+        } else {
+          return state;
         }
-        return newState;
       } catch (err) {
         return newState;
       }
     }
     case ACTIONS.SET_LOCAL_STORAGE: {
-      window.localStorage.setItem("secStateAlter", JSON.stringify(newState));
+      window.localStorage.setItem(
+        "exList",
+        JSON.stringify(newState.exList)
+      );
+      return state;
     }
 
-    case ACTIONS.ADD_RHYTEM: {
-      newState[sec] = 0;
-      return newState;
-    }
-    case ACTIONS.UPDATE_TEMPO: {
-      newState[sec] = tempo;
-      return newState;
-    }
-    case ACTIONS.DELETE_RHYTEM: {
-      delete newState[sec];
+    case ACTIONS.DELETE_EXERCISE: {
+      const list = newState.exList;
+      const firstSlice = list.slice(0, itemIndex);
+      const secondSlice = list.slice(itemIndex + 1);
+      newState.exList = [...firstSlice, ...secondSlice];
       return newState;
     }
     case ACTIONS.UPDATE_CURR_EX_NAME: {
@@ -77,13 +78,17 @@ function reducer(state, payload) {
         currExType: type,
       } = newState;
       const newExercise = { name, tempo, type };
-      newState.exerciesList.push(newExercise);
-      console.log(newState.exerciesList);
+      newState.exList.push(newExercise);
       newState.currExName = initialState.currExName;
       newState.currExTempo = initialState.currExTempo;
       newState.currExType = initialState.currExType;
 
       return newState;
+    }
+    case ACTIONS.EDIT_TEMPO: {
+      const list = newState.exList;
+
+      list[itemIndex].currExTempo = value;
     }
 
     default:
@@ -93,6 +98,25 @@ function reducer(state, payload) {
 
 export default function ExercisesEditor() {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    dispatch({
+      action: ACTIONS.GET_LOCAL_STORAGE,
+    });
+  }, []);
+  useEffect(() => {
+    dispatch({
+      action: ACTIONS.SET_LOCAL_STORAGE,
+    });
+  }, [state.exList]);
+
+  function handleAddExercise(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    dispatch({
+      action: ACTIONS.ADD_EXERCISE,
+    });
+  }
 
   return (
     <>
@@ -134,16 +158,12 @@ export default function ExercisesEditor() {
         />
         <Button
           onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            dispatch({
-              action: ACTIONS.ADD_EXERCISE,
-            });
+            handleAddExercise(e);
           }}
         >
           Add Exercise
         </Button>
-        <ExList list={state.exerciesList} />
+        <ExList list={state.exList} state={state} dispatch={dispatch} />
       </Card>
     </>
   );

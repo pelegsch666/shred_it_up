@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "../styles/styled-components/Button";
+import { ACTIONS,reducer } from "./ExercisesEditor";
 
 const StyledUl = styled.ul`
   list-style: none;
@@ -22,19 +22,27 @@ const DataContainer = styled.div`
   justify-content: space-between;
 `;
 
-export default function ExList({ list }) {
+export default function ExList({ list,state, dispatch }) {
+
   return (
     <StyledUl>
-      {list.map((item, index) => {
+      {list?.map((item, index) => {
         const { name, tempo, type } = item;
         return (
           <StyledLi key={index}>
             <DataContainer>
-              <span>{name}</span>
-              <span>{tempo}</span>
+              <span>ex:{name}</span>
+              <span>bpm:{tempo}</span>
               <span>{type}</span>
             </DataContainer>
-             <button>X</button>          
+             <button onClick={()=> dispatch({
+              action: ACTIONS.DELETE_EXERCISE,
+              itemIndex: index
+             })}>X</button> 
+             <button onClick={()=> dispatch({
+              action: ACTIONS.EDIT_TEMPO,
+              itemIndex: index
+             })}>✍️</button>         
           </StyledLi>
         );
       })}

@@ -13,6 +13,8 @@ export default function InputBlock({
   value,
   onChange,
   placeholder,
+  state,
+  dispatch,
 }) {
   return (
     <StyledContainer>
