@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ACTIONS,reducer } from "./ExercisesEditor";
+import { ACTIONS, reducer } from "./ExercisesEditor";
 
 const StyledUl = styled.ul`
   list-style: none;
@@ -9,7 +9,6 @@ const StyledUl = styled.ul`
   flex-direction: column;
   border-bottom: 2px solid black;
   width: 100%;
-  
 `;
 const StyledLi = styled.li`
   padding: 0;
@@ -22,8 +21,7 @@ const DataContainer = styled.div`
   justify-content: space-between;
 `;
 
-export default function ExList({ list,state, dispatch }) {
-
+export default function ExList({ list, state, dispatch, handleEditButton }) {
   return (
     <StyledUl>
       {list?.map((item, index) => {
@@ -35,14 +33,22 @@ export default function ExList({ list,state, dispatch }) {
               <span>bpm:{tempo}</span>
               <span>{type}</span>
             </DataContainer>
-             <button onClick={()=> dispatch({
-              action: ACTIONS.DELETE_EXERCISE,
-              itemIndex: index
-             })}>X</button> 
-             <button onClick={()=> dispatch({
-              action: ACTIONS.EDIT_TEMPO,
-              itemIndex: index
-             })}>✍️</button>         
+            <button
+              onClick={() =>
+                dispatch({
+                  action: ACTIONS.DELETE_EXERCISE,
+                  itemIndex: index,
+                })
+              }
+            >
+              X
+            </button>
+            <button
+              onClick={() => handleEditButton(index)}
+              style={state.isEditOn ? { outline: "solid blue 1px" } : null}
+            >
+              ✍️
+            </button>
           </StyledLi>
         );
       })}

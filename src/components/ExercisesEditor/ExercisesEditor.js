@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import Button from "../styles/styled-components/Button";
 import InputBlock from "./InputBlock";
@@ -15,7 +15,12 @@ export const ACTIONS = {
   GET_LOCAL_STORAGE: "get local storage",
   SET_LOCAL_STORAGE: "set local storage",
   ADD_EXERCISE: "add exercise",
-  EDIT_TEMPO: "edit tempo",
+  SET_EDIT_ON: "set edit on",
+  SET_EDIT_OFF: "set edit off",
+  SET_CURR_LIST_ITEM_INDEX: "set current list item index",
+  FILL_INPUTS_WITH_CURR_EX: "fill inputs with current exercise",
+  EDIT_EXERCISE: "edit exercise",
+  DELETE_EXERCISE: "delete exercise",
 };
 
 const initialState = {
@@ -23,6 +28,8 @@ const initialState = {
   currExType: "",
   currExTempo: 0,
   currExName: "",
+  isEditOn: false,
+  currListItemIndex: 0,
 };
 
 export function reducer(state, payload) {
@@ -33,7 +40,7 @@ export function reducer(state, payload) {
     case ACTIONS.GET_LOCAL_STORAGE: {
       try {
         const data = JSON.parse(window.localStorage.getItem("exList"));
-        console.log("data", data);
+
         newState.exList = data;
         if (data) {
           return newState;
@@ -46,7 +53,7 @@ export function reducer(state, payload) {
     }
     case ACTIONS.SET_LOCAL_STORAGE: {
       window.localStorage.setItem("exList", JSON.stringify(newState.exList));
-      console.log("the data that needs to be", JSON.stringify(newState.exList));
+
       return state;
     }
 
@@ -83,10 +90,42 @@ export function reducer(state, payload) {
 
       return newState;
     }
-    case ACTIONS.EDIT_TEMPO: {
-      const list = newState.exList;
 
-      list[itemIndex].currExTempo = value;
+    case ACTIONS.SET_EDIT_ON: {
+      newState.isEditOn = true;
+
+      return newState;
+    }
+    case ACTIONS.SET_EDIT_OFF: {
+      newState.isEditOn = false;
+      return newState;
+    }
+    case ACTIONS.SET_CURR_LIST_ITEM_INDEX: {
+      newState.currListItemIndex = itemIndex;
+
+      return newState;
+    }
+    case ACTIONS.FILL_INPUTS_WITH_CURR_EX: {
+      const { name, tempo, type } = newState.exList[newState.currListItemIndex];
+      newState.currExName = name;
+      newState.currExTempo = tempo;
+      newState.currExType = type;
+      console.log("fill inputs with curr ex", newState);
+      return newState;
+    }
+    case ACTIONS.EDIT_EXERCISE: {
+      const {
+        currExName: name,
+        currExTempo: tempo,
+        currExType: type,
+      } = newState;
+      const newExercise = { name, tempo, type };
+      newState.exList[newState.currListItemIndex] = newExercise;
+      newState.currExName = initialState.currExName;
+      newState.currExTempo = initialState.currExTempo;
+      newState.currExType = initialState.currExType;
+      newState.isEditOn = false;
+      return newState;
     }
 
     default:
@@ -108,12 +147,35 @@ export default function ExercisesEditor() {
     });
   }, [state]);
 
-  function handleAddExercise(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    dispatch({
-      action: ACTIONS.ADD_EXERCISE,
-    });
+  useEffect(() => {
+    if (state.isEditOn) {
+      dispatch({ action: ACTIONS.FILL_INPUTS_WITH_CURR_EX });
+    }
+  }, [state.isEditOn]);
+
+  function handleAddEditExercise(e) {
+    if (state.isEditOn) {
+      dispatch({ action: ACTIONS.EDIT_EXERCISE });
+    } else {
+      dispatch({
+        action: ACTIONS.ADD_EXERCISE,
+      });
+    }
+  }
+  function handleEditButton(index) {
+    if (state.isEditOn) {
+      dispatch({
+        action: ACTIONS.SET_EDIT_OFF,
+      });
+    } else {
+      dispatch({
+        action: ACTIONS.SET_EDIT_ON,
+      });
+      dispatch({
+        action: ACTIONS.SET_CURR_LIST_ITEM_INDEX,
+        itemIndex: index,
+      });
+    }
   }
 
   return (
@@ -156,12 +218,17 @@ export default function ExercisesEditor() {
         />
         <Button
           onClick={(e) => {
-            handleAddExercise(e);
+            handleAddEditExercise(e);
           }}
         >
-          Add Exercise
+          {state.isEditOn ? "Edit Exercise" : "Add Exercise"}
         </Button>
-        <ExList list={state.exList} state={state} dispatch={dispatch} />
+        <ExList
+          list={state.exList}
+          state={state}
+          dispatch={dispatch}
+          handleEditButton={handleEditButton}
+        />
       </Card>
     </>
   );
