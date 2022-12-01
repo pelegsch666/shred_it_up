@@ -33,7 +33,7 @@ export function reducer(state, payload) {
     case ACTIONS.GET_LOCAL_STORAGE: {
       try {
         const data = JSON.parse(window.localStorage.getItem("exList"));
-        console.log('data',data);
+        console.log("data", data);
         newState.exList = data;
         if (data) {
           return newState;
@@ -45,10 +45,8 @@ export function reducer(state, payload) {
       }
     }
     case ACTIONS.SET_LOCAL_STORAGE: {
-      window.localStorage.setItem(
-        "exList",
-        JSON.stringify(newState.exList)
-      );
+      window.localStorage.setItem("exList", JSON.stringify(newState.exList));
+      console.log("the data that needs to be", JSON.stringify(newState.exList));
       return state;
     }
 
@@ -108,7 +106,7 @@ export default function ExercisesEditor() {
     dispatch({
       action: ACTIONS.SET_LOCAL_STORAGE,
     });
-  }, [state.exList]);
+  }, [state]);
 
   function handleAddExercise(e) {
     e.stopPropagation();
