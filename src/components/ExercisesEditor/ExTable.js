@@ -1,33 +1,90 @@
-import { Grid, _ } from "gridjs-react";
-import { faker } from '@faker-js/faker';
+import { useMemo } from 'react';
 
-export default function ExTable({ data }) {
-  console.log(data);
+import { useTable } from 'react-table';
 
-  const grid = new Grid({
-    columns: [
-      "Name",
-      {
-        name: "Email",
-        formatter: (cell) => _(<i>{cell}</i>),
-      },
-      "Actions",
-    ],
-    data: Array(5)
-      .fill()
-      .map((x) => [
-        faker.name.fullName(),
-        faker.internet.email(),
-        _(
-          <button
-            className={"py-2 px-4 border rounded-md text-white bg-blue-600"}
-            onClick={() => alert("clicked!")}
-          >
-            Edit
-          </button>
-        ),
-      ]),
-  });
+import ItemToolsBlock from './ItemToolsBlock';
 
-  return <Grid data={grid.data} columns={grid.columns} />;
+function tableDataFormater(rowData, handleEditButton, dispatch, state) {
+	const data = [];
+	rowData.forEach((row, i) => {
+		const { name, tempo, type } = row;
+		data.push({
+			name,
+			tempo,
+			type,
+			tools: (
+				<ItemToolsBlock
+					index={i}
+					handleEditButton={handleEditButton}
+					dispatch={dispatch}
+					state={state}
+				/>
+			),
+		});
+	});
+
+
+	return data;
+}
+
+export default function ExTable({ data, dispatch, handleEditButton, state }) {
+	const tableData = useMemo(
+		() => [...tableDataFormater(data, handleEditButton, dispatch, state)],
+		[data, dispatch, handleEditButton, state]
+	);
+
+	const columns = useMemo(
+		() => [
+			{
+				Header: 'Name',
+				accessor: 'name',
+			},
+			{
+				Header: 'Tempo',
+				accessor: 'tempo',
+			},
+			{
+				Header: 'Type',
+				accessor: 'type',
+			},
+			{
+				Header: 'Tools',
+				accessor: 'tools',
+			},
+		],
+		[]
+	);
+
+
+	const tableInstance = useTable({ columns, data: tableData });
+
+
+	const { getTableProps, headerGroups, getTableBodyProps, rows, prepareRow } =
+		tableInstance;
+
+	return (
+		<table {...getTableProps()}>
+			<thead>
+				{headerGroups.map((headerGroup) => (
+					<tr {...headerGroup.getHeaderGroupProps()}>
+						{headerGroup.headers.map((column) => (
+							<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+						))}
+					</tr>
+				))}
+			</thead>
+			<tbody {...getTableBodyProps()}>
+				{rows.map((row) => {
+					prepareRow(row);
+					return (
+						<tr {...row.getRowProps()}>
+							{row.cells.map((cell) => {
+								return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+							})}
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	);
 }

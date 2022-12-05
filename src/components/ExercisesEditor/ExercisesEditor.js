@@ -1,12 +1,12 @@
 import { useReducer, useState } from "react";
 
-import Button from "../styles/styled-components/Button";
-import InputBlock from "./InputBlock";
-import Card from "../Card";
-import ExList from "./ExList";
 import { useEffect } from "react";
 import { ACTIONS, initialState } from "../../utils/constants";
 import { reducer } from "../../utils/helpers/reducer";
+import Card from "../Card";
+import Button from "../styles/styled-components/Button";
+import ExTable from "./ExTable";
+import InputBlock from "./InputBlock";
 
 
 
@@ -101,8 +101,8 @@ export default function ExercisesEditor() {
         >
           {state.isEditOn ? "Edit Exercise" : "Add Exercise"}
         </Button>
-        <ExList
-          list={state.exList}
+        <ExTable
+          data={state.exList}
           state={state}
           dispatch={dispatch}
           handleEditButton={handleEditButton}
