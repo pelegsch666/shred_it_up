@@ -1,5 +1,8 @@
 import { ACTIONS } from '../../utils/constants';
 function ItemToolsBlock({ dispatch, handleEditButton, state, index }) {
+	const trashEmoji = '🗑️';
+	const editEmoji = '✏️';
+
 	return (
 		<>
 			<button
@@ -10,13 +13,13 @@ function ItemToolsBlock({ dispatch, handleEditButton, state, index }) {
 					})
 				}
 			>
-				X
+				{trashEmoji}
 			</button>
 			<button
 				onClick={() => handleEditButton(index)}
 				style={state.isEditOn ? { outline: 'solid blue 1px' } : null}
 			>
-				✍️
+				{editEmoji}
 			</button>
 		</>
 	);

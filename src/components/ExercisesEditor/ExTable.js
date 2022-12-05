@@ -2,7 +2,35 @@ import { useMemo } from 'react';
 
 import { useTable } from 'react-table';
 
+import styled from 'styled-components';
+
 import ItemToolsBlock from './ItemToolsBlock';
+
+const StyledTd = styled.td`
+	padding: 12px;
+	background-color: rgba(255, 255, 255, 0.2);
+	color: #c33a3a;
+	font-size: 1rem;
+	font-family: 'Roboto', sans-serif;
+	border: 1px solid #c33a3a;
+	background-color: #fcffbb;
+`;
+
+const StyledTh = styled.th`
+	border: 1px solid #c33a3a;
+	color: #fcffbb;
+	font-size: 1rem;
+	font-family: 'Roboto', sans-serif;
+	padding: 6px;
+`;
+
+const StyledThead = styled.thead`
+	background-color: #c33a3a;
+`;
+
+const StyledTable = styled.table`
+	margin-top: 20px;
+`;
 
 function tableDataFormater(rowData, handleEditButton, dispatch, state) {
 	const data = [];
@@ -22,7 +50,6 @@ function tableDataFormater(rowData, handleEditButton, dispatch, state) {
 			),
 		});
 	});
-
 
 	return data;
 }
@@ -55,36 +82,40 @@ export default function ExTable({ data, dispatch, handleEditButton, state }) {
 		[]
 	);
 
-
 	const tableInstance = useTable({ columns, data: tableData });
-
 
 	const { getTableProps, headerGroups, getTableBodyProps, rows, prepareRow } =
 		tableInstance;
 
 	return (
-		<table {...getTableProps()}>
-			<thead>
+		<StyledTable {...getTableProps()}>
+			<StyledThead>
 				{headerGroups.map((headerGroup) => (
 					<tr {...headerGroup.getHeaderGroupProps()}>
 						{headerGroup.headers.map((column) => (
-							<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+							<StyledTh {...column.getHeaderProps()}>
+								{column.render('Header')}
+							</StyledTh>
 						))}
 					</tr>
 				))}
-			</thead>
+			</StyledThead>
 			<tbody {...getTableBodyProps()}>
 				{rows.map((row) => {
 					prepareRow(row);
 					return (
 						<tr {...row.getRowProps()}>
 							{row.cells.map((cell) => {
-								return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+								return (
+									<StyledTd {...cell.getCellProps()}>
+										{cell.render('Cell')}
+									</StyledTd>
+								);
 							})}
 						</tr>
 					);
 				})}
 			</tbody>
-		</table>
+		</StyledTable>
 	);
 }

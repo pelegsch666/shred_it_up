@@ -1,7 +1,7 @@
-import { createGlobalStyle } from "styled-components";
-import GeminiMoon from "./GeminiMoon.woff"
-import FLAMES from"./FLAMES.woff"
-import NeoWriter from "./NeoWriter.woff"
+import { createGlobalStyle } from 'styled-components';
+import FLAMES from './FLAMES.woff';
+import GeminiMoon from './GeminiMoon.woff';
+import NeoWriter from './NeoWriter.woff';
 const StyledFonts = createGlobalStyle`
 
 @font-face {
@@ -17,6 +17,5 @@ const StyledFonts = createGlobalStyle`
     src: url(${NeoWriter}) format('woff');
 }
 
-
-`
-export default StyledFonts
+`;
+export default StyledFonts;
