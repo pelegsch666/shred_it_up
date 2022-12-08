@@ -1,103 +1,98 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import * as Tone from "tone";
+import { useEffect, useState } from 'react';
+import * as Tone from 'tone';
 
-import Card from "../Card";
-import Button from "../styles/styled-components/Button";
+import Card from '../Card';
+import Button from '../styles/styled-components/Button';
 
 function Metronome() {
-  const [isPalying, setIsPlaying] = useState(false);
-  const [bpm, setBpm] = useState(60);
-  const [meterBeatsCount, setMeterBeatsCount] = useState(4);
-  const [meterBeatValue, setMeterBeatValue] = useState(4);
-  const [currIntervalId, setCurrIntervalId] = useState(null);
-  
-  const synth = new Tone.Synth().toDestination();
+	const [isPalying, setIsPlaying] = useState(false);
+	const [bpm, setBpm] = useState(60);
+	const [meterBeatsCount, setMeterBeatsCount] = useState(4);
+	const [meterBeatValue, setMeterBeatValue] = useState(4);
 
-  function bpmToMiliseconds(bpm) {
-    return 60000 / bpm;
-  }
+	const synth = new Tone.Synth().toDestination();
+	synth.volume.value = -10;
+	Tone.Transport.bpm.value = bpm;
+	const loop1 = new Tone.Loop((time) => {
+		synth.triggerAttackRelease('C4', '16n', time);
+	}, '4n').start(0, '4n');
+  const loop2 = new Tone.Loop((time) => {
+		synth.triggerAttackRelease('D4', '16n', time);
+	}, '4n').start(0, '8n');
 
-  function clearIntervalById(id) {
-    clearInterval(id);
-  }
+	function handleIsPlaying() {
+		setIsPlaying(!isPalying);
+	}
 
-  function playSound() {
-    synth.triggerAttackRelease("C4", "4n");
-  }
+	function handleSetBpm(e) {
+		const newValue = Number(e.target.value);
+		Tone.Transport.bpm.value = newValue;
+		setBpm(newValue);
+	}
 
-  function handleIsPlaying() {
-    setIsPlaying(!isPalying);
-  }
+	function handleSetMeterBeatsCount(e) {
+		setMeterBeatsCount(e.target.value);
+	}
+	function handleSetMeterBeatsValue(e) {
+		setMeterBeatValue(e.target.value);
+	}
 
-  function handleSetBpm(e) {
-    setBpm(e.target.value);
-  }
+	function playMetronome() {
+		Tone.Transport.start();
+	}
+	function stopMetronome() {
+		Tone.Transport.stop();
+	}
 
-  function handleSetMeterBeatsCount(e) {
-    setMeterBeatsCount(e.target.value);
-  }
-  function handleSetMeterBeatsValue(e) {
-    setMeterBeatValue(e.target.value);
-  }
-  function playMetronome() {
-    const id =  setInterval(() => {playSound()}, bpmToMiliseconds(bpm));
-    setCurrIntervalId(id)
-    
-  }
-  function stopMetronome(){
-    clearIntervalById(currIntervalId);
-  }
+	useEffect(() => {
+		if (isPalying) {
+			playMetronome();
+		} else {
+			stopMetronome();
+		}
+	}, [isPalying]);
 
+	useEffect(() => {
+		if (isPalying) {
+			stopMetronome();
+			playMetronome();
+		}
+	}, [bpm, isPalying]);
 
-  useEffect(() => {
-    if (isPalying) {
-      playMetronome();
-    }else{
-        stopMetronome();
-    }
-  }, [isPalying]);
+	return (
+		<Card>
+			<h1>Metronome</h1>
+			<h3>BPM:{bpm}</h3>
+			<input
+				type="range"
+				min={0}
+				max={300}
+				onChange={(e) => handleSetBpm(e)}
+			></input>
+			<h3>
+				Meter:{meterBeatsCount}/{meterBeatValue}
+			</h3>
+			<div>
+				{/* <input type="number" min={1} max={32}></input> */}
 
-  useEffect(() => {
-    if (isPalying) {
-      stopMetronome();
-      playMetronome();
-    }
-  }, [bpm]);
-
-  return (
-    <Card>
-      <h1>Metronome</h1>
-      <h3>BPM:{bpm}</h3>
-      <input
-        type="range"
-        min={0}
-        max={300}
-        onChange={(e) => handleSetBpm(e)}
-      ></input>
-      <h3>
-        Meter:{meterBeatsCount}/{meterBeatValue}
-      </h3>
-      <div>
-        {/* <input type="number" min={1} max={32}></input> */}
-
-        <select size={4} onChange={(e) => handleSetMeterBeatsCount(e)}>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-        </select>
-        <select onChange={(e) => handleSetMeterBeatsValue(e)}>
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={4}>4</option>
-          <option value={8}>8</option>
-          <option value={16}>16</option>
-        </select>
-      </div>
-      <Button onClick={handleIsPlaying}>{isPalying ? "Stop" : "Start"}</Button>
-    </Card>
-  );
+				<select size={4} onChange={(e) => handleSetMeterBeatsCount(e)}>
+					<option value={1}>1</option>
+					<option value={2}>2</option>
+					<option value={3}>3</option>
+					<option value={4}>4</option>
+				</select>
+				<select onChange={(e) => handleSetMeterBeatsValue(e)}>
+					<option value={1}>1</option>
+					<option value={2}>2</option>
+					<option value={4}>4</option>
+					<option value={8}>8</option>
+					<option value={16}>16</option>
+				</select>
+			</div>
+			<div></div>
+			<Button onClick={handleIsPlaying}>{isPalying ? 'Stop' : 'Start'}</Button>
+		</Card>
+	);
 }
 
 export default Metronome;
