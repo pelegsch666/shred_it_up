@@ -1,4 +1,13 @@
-## Next features:
-- Styling needs some improvment(peleg)
+# Shred It Up
 
-- Metronome needs to be done(irad) 
+Shred It Up is a tool for organizing and tracking music exercises.
+
+## Table of Contents
+
+- [Link for the app](#link-for-the-app)
+
+
+## Link for the app
+
+[Shred It Up] // TODO: add link
+

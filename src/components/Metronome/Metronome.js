@@ -75,24 +75,16 @@ function Metronome() {
 			<div>
 				{/* <input type="number" min={1} max={32}></input> */}
 
-				<select size={4} onChange={(e) => handleSetMeterBeatsCount(e)}>
-					<option value={1}>1</option>
-					<option value={2}>2</option>
-					<option value={3}>3</option>
-					<option value={4}>4</option>
-				</select>
-				<select onChange={(e) => handleSetMeterBeatsValue(e)}>
-					<option value={1}>1</option>
-					<option value={2}>2</option>
-					<option value={4}>4</option>
-					<option value={8}>8</option>
-					<option value={16}>16</option>
-				</select>
-			</div>
-			<div></div>
-			<Button onClick={handleIsPlaying}>{isPalying ? 'Stop' : 'Start'}</Button>
-		</Card>
-	);
+        <select size={1} onChange={(e) => handleSetMeterBeatsCount(e)}>
+          <option value={4}>4</option>
+        </select>
+        <select onChange={(e) => handleSetMeterBeatsValue(e)}>
+          <option value={4}>4</option>
+        </select>
+      </div>
+      <Button onClick={handleIsPlaying}>{isPalying ? "Stop" : "Start"}</Button>
+    </Card>
+  );
 }
 
 export default Metronome;
