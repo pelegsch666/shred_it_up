@@ -2,7 +2,7 @@ import { ACTIONS, initialState } from '../constants';
 
 export function reducer(state, payload) {
 	const newState = { ...state };
-	const { action, sec, tempo, value, itemIndex } = payload;
+	const { action,  value, itemIndex } = payload;
 
 	switch (action) {
 		case ACTIONS.GET_LOCAL_STORAGE: {

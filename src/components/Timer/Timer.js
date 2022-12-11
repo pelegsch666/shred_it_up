@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import  Input  from "../styles/styled-components/Input";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import Input from "../styles/styled-components/Input";
 import Card from "../Card";
 import Button from "../styles/styled-components/Button";
 const Timer = () => {
@@ -24,7 +24,7 @@ const Timer = () => {
     };
   };
 
-  const startTimer = (e) => {
+  const startTimer =useCallback( (e) => {
     let { total, hours, minutes, seconds } = getTimeRemaining(e);
     if (total >= 0) {
       // update the timer
@@ -38,9 +38,9 @@ const Timer = () => {
           (seconds > 9 ? seconds : "0" + seconds)
       );
     }
-  };
+  },[]);
 
-  const clearTimer = (e) => {
+  const clearTimer = useCallback((e) => {
     // If you adjust it you should also need to
     // adjust the Endtime formula we are about
     // to code next
@@ -54,16 +54,16 @@ const Timer = () => {
       startTimer(e);
     }, 1000);
     Ref.current = id;
-  };
+  }, [startTimer]);
 
-  const getDeadTime = () => {
+  const getDeadTime =useCallback( () => {
     let deadline = new Date();
 
     // This is where you need to adjust if
     // you entend to add more time
     deadline.setSeconds(deadline.getSeconds() + input * 60);
     return deadline;
-  };
+  },[input]);
 
   // We can use useEffect so that when the component
   // mount the timer will start as soon as possible
@@ -72,7 +72,7 @@ const Timer = () => {
   // mount only
   useEffect(() => {
     clearTimer(getDeadTime());
-  }, []);
+  }, [clearTimer, getDeadTime]);
 
   // Another way to call the clearTimer() to start
   // the countdown is via action event from the

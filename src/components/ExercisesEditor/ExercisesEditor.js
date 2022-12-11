@@ -1,6 +1,4 @@
-import { useReducer, useState } from "react";
-
-import { useEffect } from "react";
+import { useEffect, useReducer } from "react";
 import { ACTIONS, initialState } from "../../utils/constants";
 import { reducer } from "../../utils/helpers/reducer";
 import Card from "../Card";
