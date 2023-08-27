@@ -11,7 +11,7 @@ import InputBlock from "./InputBlock";
 
 export default function ExercisesEditor() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  // need to take the data from a server
   useEffect(() => {
     dispatch({
       action: ACTIONS.GET_LOCAL_STORAGE,
@@ -22,7 +22,7 @@ export default function ExercisesEditor() {
       action: ACTIONS.SET_LOCAL_STORAGE,
     });
   }, [state]);
-
+// 
   useEffect(() => {
     if (state.isEditOn) {
       dispatch({ action: ACTIONS.FILL_INPUTS_WITH_CURR_EX });

@@ -15,9 +15,7 @@ const Li = styled.li`
   cursor: url(./cursor-file/cursor.cur);
   box-sizing: border-box;
 `;
-const LinkColor = styled.link`
-  color: red;
-`;
+
 
 export default function Navbar() {
   return (
